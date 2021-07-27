@@ -1,11 +1,13 @@
 ## Title
 Manage linux users by ansible
 
+
 ## Description
 There are 3 functions in this ansible role
 - add user
 - remove user
 - debug
+
 
 ## Environment
 - Lab Structure
@@ -15,12 +17,16 @@ ansible server(192.168.74.100)
     └── node2(node_name : web2, ip: 192.168.74.102)
 ```
 
--
+- OS & Package Version
+Linux Version : CentOS 8.3.2011
+Ansible Version : ansible 2.9.21
+
 
 ## Prerequisite
 ssh
 
 작성한 코드를 실행하기 전에 설치해야할 pakage나 의존성이 걸리는 문제들을 설명하면 된다.
+
 
 ## Files Structure
 ```
