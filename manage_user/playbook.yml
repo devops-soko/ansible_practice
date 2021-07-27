@@ -1,0 +1,5 @@
+---
+- name: this is the playbook to add and remove users
+  hosts: all
+  roles:
+  - manage_user

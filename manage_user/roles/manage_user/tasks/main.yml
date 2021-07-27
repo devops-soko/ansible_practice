@@ -1,0 +1,26 @@
+---
+- name: add users
+  user:
+   name: '{{item.username}}'
+   password: '{{ item.password | password_hash("sha512") }}'
+   state: present
+  loop: '{{users}}'
+  register: result
+  tags:
+  - adduser
+
+- name: remove users
+  user:
+   name: '{{item.username}}'
+   state: absent
+  loop: '{{users}}'
+  register: result
+  tags:
+  - rmuser
+
+- name : debugging
+  debug: var=result
+  tags:
+  - adduser
+  - rmuser
+# tasks file for manage_user
