@@ -18,8 +18,8 @@ ansible server(192.168.74.100)
 ```
 
 - OS & Package Version
-Linux Version : CentOS 8.3.2011
-Ansible Version : ansible 2.9.21
+    Linux Version : CentOS 8.3.2011
+    Ansible Version : ansible 2.9.21
 
 
 ## Prerequisite
