@@ -23,9 +23,24 @@ ansible server(192.168.74.100)
 
 
 ## Prerequisite
-ssh
+- install and config ssh
+```
+# yum -y install openssh-server openssh-clients openssh-askpass
+# sed -i 's/#Port 22/Port 22/g' /etc/ssh/sshd_config
+# systemctl enable sshd
+# systemctl start sshd
 
-작성한 코드를 실행하기 전에 설치해야할 pakage나 의존성이 걸리는 문제들을 설명하면 된다.
+# firewall-cmd --permanent --zone=public --add-port=22/tcp
+# firewall-cmd --reload
+```
+
+- create ssh-key & share public key with nodes
+```
+# cd /root/.ssh/
+# ssh-keygen -t rsa
+# scp id_rsa.pub root@192.168.74.101:/root/.ssh/authorized_keys
+# scp id_rsa.pub root@192.168.74.102:/root/.ssh/authorized_keys
+```
 
 
 ## Files Structure
