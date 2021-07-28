@@ -1,0 +1,11 @@
+---
+- name : this is the playbook to change timezone of nodes
+  hosts: all
+  tasks:
+  - name: change timezone task
+    timezone:
+     name: '{{timezone_area}}'
+    register: result
+
+  - name : debugging task
+    debug: var=result
