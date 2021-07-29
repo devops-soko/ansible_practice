@@ -1,0 +1,28 @@
+---
+- name : the plapook to check package has been downloaded & to check service ru
+  hosts: all
+  tasks:
+  - name : get packages
+    package_facts:
+     manager: auto
+    tags:
+    - package_check
+
+
+  - name: package check
+    debug:
+     var: ansible_facts.packages["{{target_name}}"]
+    tags:
+    - package_check
+
+
+  - name: get service status
+    service_facts:
+    tags:
+    - service_check
+
+  - name: service check
+    debug:
+     var: ansible_facts.services["{{target_name}}.service"]
+    tags:
+    - service_check

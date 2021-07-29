@@ -1,11 +1,11 @@
 ## Title
-Change nodes' timezone
+check package and service status
 
 
 ## Description
 There are 2 functions in this ansible role
-- change timezone
-- debug
+- check if the package has been downloaded 
+- check status of service
 
 
 ## Environment
@@ -46,48 +46,16 @@ ansible server(192.168.74.100)
 ```
 .
 ├── inventory               # Target hosts
-└── playbook.yml            # The playbook to change timezone
+└── playbook.yml            # The playbook to check package and service status
 ```
 
 ## Usage
-- check timezone
+- check package has been downloaded
 ```
-# timedatectl list-timezones
-
-#output example#
-# timedatectl list-timezones
-Africa/Abidjan
-Africa/Accra
-Africa/Addis_Ababa
-Africa/Algiers
-Africa/Asmara
-Africa/Bamako
-Africa/Bangui
-Africa/Banjul
-Africa/Bissau
-Africa/Blantyre
-Africa/Brazzaville
-
-```
-
-- check current timezone 
-```
-# timedatectl
-
-
-#output example#
-               Local time: Wed 2021-07-28 15:47:12 JST
-           Universal time: Wed 2021-07-28 06:47:12 UTC
-                 RTC time: Wed 2021-07-28 06:47:12
-                Time zone: Asia/Tokyo (JST, +0900)
-System clock synchronized: yes
-              NTP service: active
-          RTC in local TZ: no
-
-
+ansible-playbook playbook.yml -i inventory -u root -t package_check  -e target_name=openssh
 ```
  
-- change timezone
+- check status of service
 ```
-ansible-playbook playbook.yml -i inventory  -u root -e timezone_area=Asia/Tokyo
+ansible-playbook playbook.yml -i inventory -u root -t service_check  -e target_name=firewalld
 ```
