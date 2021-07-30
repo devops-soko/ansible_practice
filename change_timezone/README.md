@@ -89,5 +89,5 @@ System clock synchronized: yes
  
 - change timezone
 ```
-ansible-playbook playbook.yml -i inventory  -u root -e timezone_area=Asia/Tokyo
+$ ansible-playbook playbook.yml -i inventory  -u root -e timezone_area=Asia/Tokyo
 ```

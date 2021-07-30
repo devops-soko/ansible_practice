@@ -72,10 +72,10 @@ ansible server(192.168.74.100)
 ## Usage
 - add user
 ```
-ansible-playbook ./playbook.yml -i ./inventory -u root -t adduser
+$ ansible-playbook ./playbook.yml -i ./inventory -u root -t adduser
 ```
  
 - remove user
 ```
-ansible-playbook ./playbook.yml -i ./inventory -u root -t rmuser
+$ ansible-playbook ./playbook.yml -i ./inventory -u root -t rmuser
 ```

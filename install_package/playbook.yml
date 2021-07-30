@@ -1,0 +1,45 @@
+---
+- name: install and enable package playbook
+  hosts: all
+  tasks:
+  - name: install package
+    yum:
+     name: '{{package_name}}'
+     state: latest
+    tags: 
+    - install_package
+    register: result
+
+  - name: make sure service is started up
+    service: 
+     name: '{{package_name}}'
+     state: started 
+     enabled: yes
+    tags: 
+    - start_service
+    register: result
+
+  - name: remove  package
+    yum:
+     name: '{{package_name}}'
+     state: absent
+    tags:
+    - remove_package
+    register: result
+
+  - name: disable service
+    service:
+     name: '{{package_name}}'
+     state: stopped
+     enabled: no
+    tags:
+    - stop_service
+    register: result
+ 
+  - name: debugging
+    debug: var=result
+    tags:
+    - install_pacakge
+    - start_service
+    - remove_package
+    - stop_service

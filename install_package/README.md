@@ -1,11 +1,13 @@
 ## Title
-check package and service status
+install & remove package and start & stop service 
 
 
 ## Description
-There are 2 functions in this ansible role
-- check if the package has been downloaded 
-- check status of service
+There are 4 functions in this ansible role
+- install package 
+- remove package 
+- start & enable service
+- stop & diable service  
 
 
 ## Environment
@@ -46,16 +48,28 @@ ansible server(192.168.74.100)
 ```
 .
 ├── inventory               # Target hosts
-└── playbook.yml            # The playbook to check package and service status
+└── playbook.yml            # The playbook to install & remove package and to start & stop service 
+
 ```
 
 ## Usage
-- check package has been downloaded
+- install package 
 ```
-$ ansible-playbook playbook.yml -i inventory -u root -t package_check  -e target_name=openssh
+$ ansible-playbook playbook.yml -i inventory -u root -t install_package  -e package_name=httpd
+
 ```
- 
-- check status of service
+- remove package 
 ```
-$ ansible-playbook playbook.yml -i inventory -u root -t service_check  -e target_name=firewalld
+$ ansible-playbook playbook.yml -i inventory -u root -t remove_package  -e package_name=httpd
+
+```
+- start & enable service
+```
+$ ansible-playbook playbook.yml -i inventory -u root -t start_service  -e package_name=httpd
+
+```
+- stop & diable service  
+```
+$ ansible-playbook playbook.yml -i inventory -u root -t stop_service  -e package_name=httpd
+
 ```
