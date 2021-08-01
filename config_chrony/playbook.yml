@@ -1,0 +1,41 @@
+---
+- name: the playbook to config chrony
+  hosts: all
+  tasks:
+  - name: install chrony
+    yum:
+     name: chrony
+     state: latest
+    register: result
+
+  - debug: var=result
+
+  - name: edit chrony config file
+    shell: |
+     sed -i 's/server/#server/g' /etc/chrony.conf
+     sed -i 's/pool/#server/g' /etc/chrony.conf
+     echo "server {{chrony_server}}" >> /etc/chrony.conf
+     exit 0
+    register: result
+
+  - debug: var=result
+
+
+  - name: start chrony service
+    service:
+     name: chronyd
+     state: restarted
+    register: result
+
+  - debug: var=result
+
+
+  - name: firewall 
+    shell: |
+     firewall-cmd --add-service=ntp --permanent
+     firewall-cmd --reload
+     exit 0
+    register: result
+
+  - debug: var=result
+
