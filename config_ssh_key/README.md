@@ -4,11 +4,17 @@ config node to ssh without password
 
 ## Description
 step 1) check if there is .ssh dicrectory & authorized_key file
+
 step 2) if there is no .ssh dicrectory -> genterate .ssh dicrectory
+
 step 3) share ssh public key to nodes' home directory
+
 step 4) if there is no authorized_key file -> copy shared public key to .ssh as authorized_key file & chagned permissions as 600
 
-step 5) if there is authorized_key file -> append shared public key to authorized_key file
+
+step 5) if there is authorized_key file -> append shared public key to authorized_key 
+file
+
 step 6) remove public key in user's home directory
 
 
@@ -54,3 +60,4 @@ user needs to use same username and password in each nodes
 ```
 $ ansible-playbook playbook.yml -i inventory -u user1 -k
 ```
+-> input target user's password
