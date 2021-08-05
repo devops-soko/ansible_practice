@@ -33,7 +33,7 @@ cf. user needs to use same username and password in each nodes
 
 
 ## Prerequisite
-- install and config ssh & create ssh-key (need to do all servers)
+- install and config ssh (need to do all servers)
 ```
 # yum -y install openssh-server openssh-clients openssh-askpass
 # sed -i 's/#Port 22/Port 22/g' /etc/ssh/sshd_config
