@@ -22,7 +22,7 @@ ansible server(192.168.74.100)
 
 
 ## Prerequisite
-- install and config ssh
+- install and config ssh & create ssh-key (need to do all servers)
 ```
 # yum -y install openssh-server openssh-clients openssh-askpass
 # sed -i 's/#Port 22/Port 22/g' /etc/ssh/sshd_config
@@ -31,14 +31,13 @@ ansible server(192.168.74.100)
 
 # firewall-cmd --permanent --zone=public --add-port=22/tcp
 # firewall-cmd --reload
+# ssh-keygen
 ```
 
-- create ssh-key & share public key with nodes
+- share public key with nodes (need to do only ansible server)
 ```
-# cd /root/.ssh/
-# ssh-keygen -t rsa
-# scp id_rsa.pub root@192.168.74.101:/root/.ssh/authorized_keys
-# scp id_rsa.pub root@192.168.74.102:/root/.ssh/authorized_keys
+# ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.74.101
+# ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.74.102
 ```
 
 

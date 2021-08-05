@@ -1,0 +1,38 @@
+---
+- name: share public ssh key to nodes so login without pw
+  hosts: all
+  tasks:
+  - name: check .ssh directory exits
+    stat:
+     path: ~/.ssh
+    register: stat_result1
+
+  - name: check authorized key file exits
+    stat:
+     path: ~/.ssh/authorized_keys
+    register: stat_result2
+
+  - name: generate .ssh 
+    shell: echo -e '' | ssh-keygen -q -t rsa -C "" -N ""
+    when: not stat_result1.stat.exists
+
+  - name: share public key from ansible to node 
+    copy:
+     src: ~/.ssh/id_rsa.pub
+     dest: ~/id_rsa.pub
+
+  - name: copy public key 
+    shell: |
+     cp ~/id_rsa.pub ~/.ssh/authorized_keys
+     chmod 600 ~/.ssh/authorized_keys
+     exit 0
+    when: not stat_result2.stat.exists
+
+  - name: authorized key append
+    shell: cat id_rsa.pub >> ~/.ssh/authorized_keys
+    when: stat_result2.stat.exists
+
+  - name: remvoe original pub key file
+    file:
+     path: ~/id_rsa.pub
+     state: absent
