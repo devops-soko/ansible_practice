@@ -118,11 +118,17 @@ firewalld.service                                                      disabled
                             # on node's dir
 ```
 
-- shared dir
+- shared dir in ansible server
 ```
 /home
 └── soko0305                
     └── nfs                # Target dir 
+```
+
+- shared dir in nodes
+```
+/
+└── nfs                 
 ```
 
 ## Usage

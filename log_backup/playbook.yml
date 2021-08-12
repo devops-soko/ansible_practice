@@ -1,0 +1,12 @@
+---
+- name: backup each node's log file in nfs file periodically
+  hosts: all
+  become: true
+  become_user: root
+  tasks:
+  - name: get nodes' info
+    ansible.builtin.debug:
+     var: ansible_facts
+
+  - name: backup log file in shared directory
+    shell: cp /var/log/messages /nfs/{{ansible_facts['nodename']}}-log-backup
