@@ -33,7 +33,7 @@ cf. redhat ansible tower & AWS = it is tool to manage ansible servers when user 
 
 
 ## 2. How to install Ansible
-cf. install ansible on only main control server (it is unnecessary to install ansible on agents)
+cf. install ansible on only main control server (it is unnecessary to install ansible on nodes)
 
 ### step 1. install epel package
 ```
@@ -59,7 +59,7 @@ cf. install ansible on only main control server (it is unnecessary to install an
 
 ## 4. ansible command
 ### 1) ansbile
-- use case: execute module once on target agents
+- use case: execute module once on target nodes
 - frequently used options
 
 | Option | Description | 
@@ -129,7 +129,7 @@ cf. There are more ansible commands and options. If you want to know more then p
 
 
 ## 5. inventory
-### 1) set agent group and name
+### 1) set node group and name
 ```
 [all] 
 web1 ansible_ssh_host=web1.example.co
@@ -178,24 +178,129 @@ web_file=/tmp/web_file
 - hosts: backup
   tasks:
   - file:
-      dest: '{{backup_file}}'
-      state: '{{file_state}}'
+     dest: '{{backup_file}}'
+     state: '{{file_state}}'
 
 - hosts: db
   tasks:
   - file:
-      dest: '{{db_file}}'
-      state: '{{file_state}}'
+     dest: '{{db_file}}'
+     state: '{{file_state}}'
     when: db_file is defined
 - hosts: all
   tasks:
   - file:
-      dest: '{{all_file}}'
-      state: '{{file_state}}'
+     dest: '{{all_file}}'
+     state: '{{file_state}}'
 ```
 -> the values of backup_file and web_file will be defined automatically by inventory file
 
 ## 6. yml syntax
+### 1) structure
+```
+---                       # playbook need to start by --- / use space not tab
+- name: sample_playbook   
+  hosts: all              # target nodes
+  become: yes              
+  become_user: root     
+  tasks:                  # tasks which will be executed by playbook
+  - name: ensure apache is at the latest ver  # first task
+    yum:                  # first task's module   
+     name: httpd   
+     state: latest
+  - name: ensuer apache is running # second task
+    service:          # second task's module
+     name: httpd  
+     state: started
+```
+### 2) how to get user input
+- define 
+```
+‘{{var_name}}’
+```
+- input
+```
+# ansible-playbook -e var_name=value
+```
+
+### 3) tasks external commands
+- name : the playbook's name
+- hosts : target nodes or group
+- become : Escalate Privileges
+- become_user : Set user which is going to access the target nodes
+- connection : connection type (ssh (defualt) / local)
+- tasks : Define the tasks that will be run in that playbook
+- handers : Predefined tasks to call in tasks block(like function)
+- vars : define variables
+- strategy : choose whether to run in order or at random (linear(default) / free)
+(refer to https://docs.ansible.com/ansible/latest/user_guide/playbooks_strategies.html)
+- forks : Limit number of nodes that can be executed simultaneously (default : 5)
+- serial : Number of nodes to run simultaneously 
+(refer to https://medium.com/devops-srilanka/difference-between-forks-and-serial-in-ansible-48677ebe3f36)
+
+### 4) tasks internal commands
+- name : the task's name
+- tags : tag the task 
+- register : save the task's output
+- when : execute the task when certain conditions are met
+- notify : use tasks predefined in handlers
+- template : create files by inserting variables into the template (how to make template? please refer to chapter 8)
+- loop : execute the task repeatly(refer to https://moonstrike.github.io/ansible/2016/10/17/Ansible-Loops.html)
+cf. example
+```
+---
+- name: file management ansible playbook
+  hosts: all
+  tasks:
+  - name : get system var                   #시스템 변수 설정
+    ansible.builtin.debug:
+      var: ansible_facts
+    tags:
+    - mkdir
+    - mkfile
+    - rmfile
+
+  - name: make dir
+    file:
+      dest: '{{file_path}}'
+      state: directory
+    tags:
+    - mkdir
+    register: result
+
+  - name: make file
+    file:
+      dest: '{{file_path}}'
+      state: touch
+    tags:
+    - mkfile
+    register: result
+
+
+  - name: delete file
+    file:
+      dest: '{{file_path}}'
+      state: absent
+    when: ansible_facts['os_family']=="Debian"    #시스템변수 중 특정 변수 비교
+    tags:
+    - rmfile
+    register: result
+
+
+  - name: debug
+    debug: var=result
+    tags:
+    - mkdir
+    - mkfile
+    - rmfile
+```
+
+
+
+### 5)
+### 6)
+### 7)
+### 8)
 
 
 ## 7. roles
