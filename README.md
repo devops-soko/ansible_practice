@@ -55,3 +55,81 @@ cf. install ansible on only main control server (it is unnecessary to install an
 - /etc/ansible/ansible.cfg : a config file for ansible 
 - /etc/ansible/hosts : define target nodes
 ### 2) /home/user directory/.ansible
+
+
+## 4. ansible command
+### 1) ansbile
+- use case: execute module once on target agents
+- frequently used options
+| Option | Description | 
+|:--------|:--------|
+| -i | put inventory |
+| -m | select module |
+| -a | put moule's args |
+| -k | ask for connection password |
+| -K | ask for privilege escalation password |
+| --list-hosts | outputs a list of matching hosts (does not execute anything else) |
+- examples
+```
+ansible all -m user -a “user=soko password=1234” -k
+ansible all -m ping -k
+```
+
+### 2) ansible-playbook
+- use case: 
+- frequently used options
+| Option | Description | 
+|:--------|:--------|
+| -i | put inventory |
+| --tags | only run tasks tagged with input values |
+| --skip-tags | skip tasks tagged with input values |
+| -e | set additional variables |
+| -u | remote user |
+| -k | ask for connection password |
+| --start-at-task | start the playbook at the task matching this name |
+| --list-hosts | outputs a list of matching hosts (does not execute anything else) |
+| --list-tasks | list all tasks that would be executed (does not execute anything else) |
+| --check | try to predict some of the changes that may occur (does not execute anything else) |
+| --diff --check | predict the differences in files (does not execute anything else) |
+
+### 3) ansible-galaxy
+- use case : use roles in ansible galaxy
+- how to use 
+```
+# ansible-galaxy install [roles name]
+```
+
+### 4) ansible-vault
+- use case : Encryption
+- how to use 
+step1. define parameter in playbook or main.yml in tasks directory of roles
+```
+password:'{{vault_password}}'
+```
+
+step2. save parameter's value in file or main.yml in var directory of roles
+```
+vault_password: test123
+```
+
+step3. execute command
+```
+# ansible-vault encrypt [filename]
+```
+
+step4. change file
+```
+# ansible-vault edit [filename]
+
+```
+
+cf. There are more ansible commands and options. If you want to know more then please refer to https://docs.ansible.com/ansible/latest/user_guide/command_line_tools.html
+
+
+## 5. inventory
+
+## 6. yml syntax
+
+## 7. roles
+
+## 8. template 
