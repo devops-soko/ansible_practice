@@ -69,6 +69,7 @@ cf. install ansible on only main control server (it is unnecessary to install an
 | -k | ask for connection password |
 | -K | ask for privilege escalation password |
 | --list-hosts | outputs a list of matching hosts (does not execute anything else) |
+
 - examples
 ```
 ansible all -m user -a “user=soko password=1234” -k
