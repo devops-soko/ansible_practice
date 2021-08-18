@@ -61,6 +61,7 @@ cf. install ansible on only main control server (it is unnecessary to install an
 ### 1) ansbile
 - use case: execute module once on target agents
 - frequently used options
+
 | Option | Description | 
 |:--------|:--------|
 | -i | put inventory |
@@ -79,6 +80,7 @@ ansible all -m ping -k
 ### 2) ansible-playbook
 - use case: 
 - frequently used options
+
 | Option | Description | 
 |:--------|:--------|
 | -i | put inventory |
