@@ -123,15 +123,80 @@ step3. execute command
 step4. change file
 ```
 # ansible-vault edit [filename]
-
 ```
 
 cf. There are more ansible commands and options. If you want to know more then please refer to https://docs.ansible.com/ansible/latest/user_guide/command_line_tools.html
 
 
 ## 5. inventory
+### 1) set agent group and name
+```
+[all] 
+web1 ansible_ssh_host=web1.example.co
+web2 ansible_ssh_host=web2.example.co
+db1 ansible_ssh_host=db1.example.co
+db2 ansible_ssh_host=db2.example.co
+
+[southeast]
+web1
+web2
+
+[northeast]
+db1
+
+[southwest]
+db2
+
+[east:children]
+southeast
+northeast
+```
+
+### 2) define variable
+- make group and define variable at the same time
+```
+[backup]
+db2 backup_file=/tmp/backup_file
+```
+
+- define variable in existing group
+```
+[southeast:vars]
+web_file=/tmp/web_file
+```
+
+- example
+```
+---
+- hosts: web
+  tasks:
+  - name: create a web file
+    file:
+      dest: '{{web_file}}'
+      state: '{{file_state}}'
+
+- hosts: backup
+  tasks:
+  - file:
+      dest: '{{backup_file}}'
+      state: '{{file_state}}'
+
+- hosts: db
+  tasks:
+  - file:
+      dest: '{{db_file}}'
+      state: '{{file_state}}'
+    when: db_file is defined
+- hosts: all
+  tasks:
+  - file:
+      dest: '{{all_file}}'
+      state: '{{file_state}}'
+```
+-> the values of backup_file and web_file will be defined automatically by inventory file
 
 ## 6. yml syntax
+
 
 ## 7. roles
 
