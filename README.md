@@ -252,7 +252,7 @@ cf. example
 - name: file management ansible playbook
   hosts: all
   tasks:
-  - name : get system var                   #시스템 변수 설정
+  - name : get system var    
     ansible.builtin.debug:
       var: ansible_facts
     tags:
@@ -281,7 +281,7 @@ cf. example
     file:
       dest: '{{file_path}}'
       state: absent
-    when: ansible_facts['os_family']=="Debian"    #시스템변수 중 특정 변수 비교
+    when: ansible_facts['os_family']=="Debian"  
     tags:
     - rmfile
     register: result
@@ -297,12 +297,162 @@ cf. example
 
 
 
-### 5)
-### 6)
-### 7)
-### 8)
+### 5) other useful skill
+- debug module : show if tasks were succeed or not
+```
+---
+- name: file management ansible playbook
+  hosts: all
+  tasks:
+  - name: make dir
+    file:
+     dest: '{{file_path}}'
+     state: directory
+    tags:
+    - mkdir
+    register: result
 
+  - name: make file
+    file:
+      dest: '{{file_path}}'
+      state: touch
+    tags:
+    - mkfile
+    register: result
+
+
+  - name: delete file
+    file:
+     dest: '{{file_path}}'
+     state: absent
+    when: file_path is defined
+    tags:
+    - rmfile
+    register: result
+
+
+  - name: debug                     
+    debug: var=result               
+    tags:
+    - mkdir
+    - mkfile
+    - rmfile
+```
 
 ## 7. roles
+### 1) what is roles
+define tasks, variables, templates, etc in a directory structure and use like packages
+
+### 2) why we use roles
+if we define tasks in roles instead of a playbook file then it will be easy to reuse & share
+
+### 3) how to make roles
+make roles in current directory
+```
+# ansible-galaxy init [roles name]
+```
+
+### 4) location
+```
+./roles 
+/home/ansible/.ansible/roles 
+/usr/share/ansible/roles 
+/etc/ansible/roles
+```
+### 5) the structure of roles
+```
+.
+└── test_role
+    ├── defaults
+    │   └── main.yml
+    ├── files
+    ├── meta
+    │   └── main.yml
+    ├── README.md
+    ├── templates
+    ├── tests
+    │   ├── inventory
+    │   └── test.yml
+    ├── vars
+    │   └── main.yml
+    ├── handlers
+    │   └── main.yml
+    └── tasks
+        └── main.yml      
+```
+
+| dir or file | Description | 
+|:--------|:--------|
+| default | Set defaults to use in task |
+| files | input location of static files which are referenced in task |
+| meta | input meta data like dependency information(ex. producer, company, license information, etc.) |
+| tasks | define tasks |
+| templates | put .j2 file to use as template |
+| tests | set inventory and yml file that can be used to test the role |
+| vars | List of variables to use in role |
+| handlers | define handlers |
+| README.md | roles description which user can read|
 
 ## 8. template 
+### 1) jinja2 syntax
+- comment
+```
+{#...#}
+```
+- variable
+```
+{{var name}}
+```
+- control statement (loop, conditional)
+```
+{%...%}
+
+{% if test==1%}
+			…
+{% endif %}
+
+{% for i in range 10%}
+			…
+{% endfor %}
+```
+
+### 2) example
+- j2 file
+```
+{% for item in range(num_var) %}         # num_var is defined by yml file
+{{item}}
+{% endfor %}
+```
+
+- yml file
+```
+---
+- name: template test playbook
+  become: true
+  become_user: root
+  hosts: infra
+  vars:
+   num_var: 8                      # it will be passed to j2 file
+  tasks:
+  - name: make file
+    template:                      # template module
+     src: './template.j2'
+     dest: '{{file_path}}'
+    tags:
+    - mkfile
+    register: result
+
+  - name: remove file
+    file:
+     dest: '{{file_path}}'
+     state: absent
+    tags:
+    - rmfile
+    register: result
+
+  - name: debugging
+    debug: var=result
+    tags:
+    - mkfile
+    - rmfile
+```
